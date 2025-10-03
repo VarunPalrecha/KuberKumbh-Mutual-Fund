@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KuberKumbh - Mutual Fund</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #1a4d7a 0%, #2d5f8d 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            height: 60px;
+            width: auto;
+            object-fit: contain;
+            max-width: 300px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Page Sections */
+        .page {
+            display: none;
+            min-height: calc(100vh - 80px);
+            padding: 3rem 2rem;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Home Page */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, #e8f4f8 0%, #f0f8ff 100%);
+            border-radius: 10px;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: #1a4d7a;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #2d5f8d;
+            max-width: 800px;
+            margin: 0 auto;
+            font-weight: 500;
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            color: #1a4d7a;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .card p, .card div {
+            line-height: 1.8;
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .card li:last-child {
+            border-bottom: none;
+        }
+
+        /* About/Management Page */
+        .team-section {
+            margin-top: 3rem;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .team-member {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .team-member-photo {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #1a4d7a 0%, #c9a961 100%);
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            font-weight: bold;
+            overflow: hidden;
+        }
+
+        .team-member-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .placeholder {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            border-left: 4px solid #c9a961;
+            font-style: italic;
+            color: #666;
+            margin: 1rem 0;
+        }
+
+        /* NAV & Portfolio Page */
+        .nav-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .nav-display {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #e8f4f8 0%, #f0f8ff 100%);
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+
+        .nav-value {
+            font-size: 3rem;
+            color: #1a4d7a;
+            font-weight: bold;
+        }
+
+        .portfolio-chart {
+            background: #f9f9f9;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: linear-gradient(135deg, #1a4d7a 0%, #2d5f8d 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        /* Documents Page */
+        .document-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .document-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .document-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #1a4d7a 0%, #c9a961 100%);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(26, 77, 122, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(26, 77, 122, 0.5);
+        }
+
+        .document-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1a4d7a 0%, #c9a961 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            color: #1a4d7a;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 0.5rem;
+                width: 100%;
+                text-align: center;
+            }
+
+            .logo img {
+                height: 50px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .nav-value {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <img src="D:\AJNIFM MBA Finance\AUREX\Logo.jpg" alt="KuberKumbh Mutual Fund Logo">
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link active" onclick="showPage('home')">Home</a></li>
+                <li><a href="#about" class="nav-link" onclick="showPage('about')">About Us</a></li>
+                <li><a href="#nav" class="nav-link" onclick="showPage('nav')">NAV & Portfolio</a></li>
+                <li><a href="#documents" class="nav-link" onclick="showPage('documents')">Documents</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <div class="container">
+            <div class="hero">
+                <h1>KuberKumbh Mutual Fund</h1>
+                <p>Harnessing Sacred Wealth, Investing with Wisdom.</p>
+            </div>
+
+            <h2>Why Invest With Us</h2>
+            <div class="info-cards">
+                <div class="card">
+                    <h3>📈 Our Investment Philosophy</h3>
+                    <p>Our philosophy blends deep fundamental research with a pragmatic momentum overlay and a disciplined buy-and-hold discipline. We invest concentrated capital in a hand-picked basket of large, mid and small-cap Indian companies that show superior earnings potential, healthy returns on equity and improving cash flows — and we time entries using short-term momentum signals to avoid "catching the bottom".</p>
+                </div>
+                <div class="card">
+                    <h3>🎯 Fund Objective</h3>
+                    <p>To capture long-term capital appreciation by investing in a concentrated basket of Indian large-, mid- and small-cap equities selected for strong fundamentals and supported by short-term momentum, while minimising turnover, trading costs and taxes through a disciplined buy-and-hold approach with a single annual rebalance.</p>
+                </div>
+                <div class="card">
+                    <h3>💼 Fund Category</h3>
+                    <p>Concentrated Flexi-Cap Equity Fund — Active, buy-and-hold strategy with a momentum overlay (low turnover, annual rebalance).</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 3rem;">Key Highlights</h3>
+            <div class="card">
+                <ul>
+                    <li><strong>AUM Size:</strong> ₹3,98,703.80</li>
+                    <li><strong>Inception Date:</strong> July 7, 2025</li>
+                    <li><strong>Benchmark Index:</strong> NIFTY 500 TRI</li>
+                    <li><strong>Minimum Investment:</strong> ₹5,000</li>
+                    <li><strong>Exit Load:</strong> 1.0%</li>
+                    <li><strong>Expense Ratio:</strong> 0.38%</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- About/Management Page -->
+    <div id="about" class="page">
+        <div class="container">
+            <h2>About Our AMC</h2>
+            <div class="card">
+                <p>KuberKumbh Asset Management was founded to bring a refreshingly patient, research-driven approach to Indian equity investing. Launched alongside the KuberKumbh strategy (Fund inception: July 7, 2025), our AMC was created by a team of seasoned investment professionals who saw an opportunity: combine rigorous fundamental research with a simple, low-turnover implementation that reduces trading costs and tax friction for long-term investors. From day one our focus has been on building concentrated, high-conviction portfolios and running them with institutional governance, robust risk controls and clear, plain-spoken communication to investors.</p>
+            </div>
+
+            <div class="team-section">
+                <h2>Our Management Team</h2>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="team-member-photo">
+                            <img src="Harvendra.jpg" alt="Harvendra Pratap Singh" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        </div>
+                        <h3>Harvendra Pratap Singh</h3>
+                        <p style="color: #1a4d7a; font-weight: 600;">Promoter</p>
+                        <p style="font-size: 0.9rem; color: #666;"><strong>Qualification:</strong> CA, CFA</p>
+                        <p style="font-size: 0.9rem; color: #666;"><strong>Experience:</strong> 15 years</p>
+                        <p style="font-size: 0.9rem; color: #666;">Chartered Accountant with expertise in financial analysis and strategic planning.</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="team-member-photo">
+                            <img src="Aakanskha.jpg" alt="Aakanksha Vatsa" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        </div>
+                        <h3>Aakanksha Vatsa</h3>
+                        <p style="color: #1a4d7a; font-weight: 600;">Promoter</p>
+                        <p style="font-size: 0.9rem; color: #666;"><strong>Qualification:</strong> MBA (Finance)</p>
+                        <p style="font-size: 0.9rem; color: #666;"><strong>Experience:</strong> 12 years</p>
+                        <p style="font-size: 0.9rem; color: #666;">Specialist in Finance & Asset Management with proven track record.</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="team-member-photo">
+                            <img src="Ashish.jpg" alt="Ashish Raj" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        </div>
+                        <h3>Ashish Raj</h3>
+                        <p style="color: #1a4d7a; font-weight: 600;">Fund Manager (Head of Commodity)</p>
+                        <p style="font-size: 0.9rem; color: #666;"><strong>Qualification:</strong> MBA (Finance)</p>
+                        <p style="font-size: 0.9rem; color: #666;"><strong>Experience:</strong> 10 years</p>
+                        <p style="font-size: 0.9rem; color: #666;">Expert in commodity markets and derivatives trading.</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="team-member-photo">
+                            <img src="Atul.jpg" alt="Atul Kumar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        </div>
+                        <h3>Atul Kumar</h3>
+                        <p style="color: #1a4d7a; font-weight: 600;">Fund Manager (Head of Debt)</p>
+                        <p style="font-size: 0.9rem; color: #666;"><strong>Qualification:</strong> CFA Level 3</p>
+                        <p style="font-size: 0.9rem; color: #666;"><strong>Experience:</strong> 8 years</p>
+                        <p style="font-size: 0.9rem; color: #666;">Specializes in fixed income securities and debt portfolio management.</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="team-member-photo">
+                            <img src="Varun.jpg" alt="Varun Rajesh Palrecha" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        </div>
+                        <h3>Varun Rajesh Palrecha</h3>
+                        <p style="color: #1a4d7a; font-weight: 600;">Fund Manager (Head of Equity)</p>
+                        <p style="font-size: 0.9rem; color: #666;"><strong>Qualification:</strong> CFA Level 2</p>
+                        <p style="font-size: 0.9rem; color: #666;"><strong>Experience:</strong> 6 years</p>
+                        <p style="font-size: 0.9rem; color: #666;">Leads equity research and portfolio construction strategies.</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="team-member-photo">
+                            <img src="Mansi.jpg" alt="Mansi Patel" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        </div>
+                        <h3>Mansi Patel</h3>
+                        <p style="color: #1a4d7a; font-weight: 600;">Fund Manager</p>
+                        <p style="font-size: 0.9rem; color: #666;"><strong>Qualification:</strong> MBA (Finance)</p>
+                        <p style="font-size: 0.9rem; color: #666;"><strong>Experience:</strong> 7 years</p>
+                        <p style="font-size: 0.9rem; color: #666;">Experienced in portfolio management and investment analysis.</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="team-member-photo">
+                            <img src="Harpreet.jpg" alt="Harpreet Kaur" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        </div>
+                        <h3>Harpreet Kaur</h3>
+                        <p style="color: #1a4d7a; font-weight: 600;">Fund Manager</p>
+                        <p style="font-size: 0.9rem; color: #666;"><strong>Qualification:</strong> MBA</p>
+                        <p style="font-size: 0.9rem; color: #666;"><strong>Experience:</strong> 9 years</p>
+                        <p style="font-size: 0.9rem; color: #666;">Skilled in fund operations and investment strategy execution.</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="team-member-photo">
+                            <img src="Vivek%20Ojha.jpg" alt="Vivek Ojha" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        </div>
+                        <h3>Vivek Ojha</h3>
+                        <p style="color: #1a4d7a; font-weight: 600;">Fund Manager</p>
+                        <p style="font-size: 0.9rem; color: #666;"><strong>Qualification:</strong> MBA</p>
+                        <p style="font-size: 0.9rem; color: #666;"><strong>Experience:</strong> 8 years</p>
+                        <p style="font-size: 0.9rem; color: #666;">Expert in market research and investment decision-making.</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="team-member-photo">
+                            <img src="Shivam.jpg" alt="Shivam Kumar Singh" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        </div>
+                        <h3>Shivam Kumar Singh</h3>
+                        <p style="color: #1a4d7a; font-weight: 600;">Risk Officer</p>
+                        <p style="font-size: 0.9rem; color: #666;"><strong>Qualification:</strong> MBA (Risk Management)</p>
+                        <p style="font-size: 0.9rem; color: #666;"><strong>Experience:</strong> 5 years</p>
+                        <p style="font-size: 0.9rem; color: #666;">Specializes in identifying and mitigating investment risks.</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="team-member-photo">
+                            <img src="Vivek%20Kumar.jpg" alt="Vivek Kumar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        </div>
+                        <h3>Vivek Kumar</h3>
+                        <p style="color: #00a896; font-weight: 600;">Compliance Officer</p>
+                        <p style="font-size: 0.9rem; color: #666;"><strong>Qualification:</strong> LLB, Diploma in Compliance</p>
+                        <p style="font-size: 0.9rem; color: #666;"><strong>Experience:</strong> 7 years</p>
+                        <p style="font-size: 0.9rem; color: #666;">Ensures regulatory compliance and legal adherence.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Our Story</h3>
+            <div class="card">
+                <p>KuberKumbh was born in 2025 out of a single conviction: patient, research-led investing beats noise. We built a concentrated, high-conviction portfolio powered by rigorous fundamentals and a pragmatic momentum overlay — then held it with discipline. That approach has paid off: we currently report the best NAV to date and were awarded Best Performing AMC at AJNIFM, outperforming our peers.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAV & Portfolio Page -->
+    <div id="nav" class="page">
+        <div class="container">
+            <h2>Net Asset Value (NAV)</h2>
+            <div class="nav-section">
+                <div class="nav-display">
+                    <p style="color: #666; margin-bottom: 0.5rem;">Current NAV</p>
+                    <div class="nav-value">₹ 11.27</div>
+                    <p style="color: #666; margin-top: 0.5rem;">As on October 3, 2025</p>
+                </div>
+            </div>
+
+            <h2>Portfolio Distribution</h2>
+            <div class="nav-section">
+                <h3>Asset Allocation</h3>
+                <table style="margin-top: 1rem;">
+                    <thead>
+                        <tr>
+                            <th>Asset Class</th>
+                            <th>Allocation (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Large Cap</td>
+                            <td>23.12%</td>
+                        </tr>
+                        <tr>
+                            <td>Mid Cap</td>
+                            <td>36.51%</td>
+                        </tr>
+                        <tr>
+                            <td>Small Cap</td>
+                            <td>39.85%</td>
+                        </tr>
+                        <tr>
+                            <td>Cash</td>
+                            <td>0.53%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Portfolio Disclosure</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Industry</th>
+                        <th>% of NAV</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Aditya Birla Capital Limited</td>
+                        <td>Investment Company</td>
+                        <td>23.53%</td>
+                    </tr>
+                    <tr>
+                        <td>Dixon Technologies</td>
+                        <td>Consumer Electronics</td>
+                        <td>12.98%</td>
+                    </tr>
+                    <tr>
+                        <td>Avenue Supermarket Ltd</td>
+                        <td>Diversified Retail</td>
+                        <td>12.02%</td>
+                    </tr>
+                    <tr>
+                        <td>Gokul Agro</td>
+                        <td>Edible Oil</td>
+                        <td>17.07%</td>
+                    </tr>
+                    <tr>
+                        <td>Jio Financial Services</td>
+                        <td>Financial Services</td>
+                        <td>11.09%</td>
+                    </tr>
+                    <tr>
+                        <td>Dr. Lal Path</td>
+                        <td>Healthcare Service Provider</td>
+                        <td>11.26%</td>
+                    </tr>
+                    <tr>
+                        <td>Salasar Techno</td>
+                        <td>Industrial Products</td>
+                        <td>11.52%</td>
+                    </tr>
+                    <tr>
+                        <td>Cash & Cash Equivalent</td>
+                        <td>Cash and Cash Equivalent</td>
+                        <td>0.53%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Documents Page -->
+    <div id="documents" class="page">
+        <div class="container">
+            <h2>Downloads Section</h2>
+            <p style="color: #666; margin-bottom: 2rem;">Access important fund documents and reports</p>
+            
+            <div class="document-grid" style="grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));">
+                <div class="document-card" style="cursor: default;">
+                    <div class="document-icon">📊</div>
+                    <h3>NAV Sheet</h3>
+                    <p style="margin: 1rem 0; color: #666;">View complete NAV history and detailed performance metrics of the fund</p>
+                    <a href="https://docs.google.com/spreadsheets/d/1j3PUO6qf4C68bYaQVLLMMqcktomPQaUwur7uMUBKY3s/edit?usp=sharing" 
+                       target="_blank" 
+                       class="download-btn">
+                        📥 View NAV Sheet
+                    </a>
+                </div>
+                
+                <div class="document-card" style="cursor: default;">
+                    <div class="document-icon">📋</div>
+                    <h3>Scheme Information Document</h3>
+                    <p style="margin: 1rem 0; color: #666;">Complete details about the scheme, investment objective, strategy and terms</p>
+                    <a href="https://docs.google.com/document/d/1e-EanB-vgA4pPJj3RFMiOjJRfNRvhj_7/edit?usp=sharing&ouid=118132845172636135093&rtpof=true&sd=true" 
+                       target="_blank" 
+                       class="download-btn">
+                        📥 View SID Document
+                    </a>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 3rem;">Important Information</h3>
+            <div class="card">
+                <p style="line-height: 1.8; color: #555;">
+                    <strong>Note:</strong> These documents contain important information about the KuberKumbh Mutual Fund. Please read all documents carefully before making any investment decisions. The NAV Sheet is updated regularly to reflect the latest fund performance, while the Scheme Information Document provides comprehensive details about the fund's structure, objectives, and operational guidelines.
+                </p>
+            </div>
+
+            <h3>Regulatory Disclosures</h3>
+            <div class="card">
+                <p style="line-height: 1.8; color: #555;">
+                    <strong>Risk Factors:</strong> Mutual Fund investments are subject to market risks. Past performance is not indicative of future returns. Please read all scheme related documents carefully before investing.
+                </p>
+                <p style="line-height: 1.8; color: #555; margin-top: 1rem;">
+                    <strong>AUREX Registration:</strong> <span class="placeholder">10005</span>
+                </p>
+                <p style="line-height: 1.8; color: #555; margin-top: 1rem;">
+                    <strong>Disclaimer:</strong> The information provided is for general information purposes only. Investors should consult their financial advisors before making investment decisions.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p><strong>KuberKumbh Asset Management</strong> - Registered with AUREX | Registration No: <span class="placeholder">10005</span></p>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">
+                <span class="placeholder">AJNIFM, Faridabad</span>
+            </p>
+            <p style="margin-top: 1rem; font-size: 0.8rem; color: #999;">
+                Mutual Fund investments are subject to market risks. Please read all scheme related documents carefully before investing.
+            </p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #999;">
+                © <span id="year"></span> KuberKumbh Asset Management. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Set current year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Page navigation
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            document.getElementById(pageId).classList.add('active');
+            event.target.classList.add('active');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+            });
+        });
+    </script>
+</body>
+</html>
